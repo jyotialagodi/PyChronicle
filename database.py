@@ -1,45 +1,47 @@
 import sqlite3
-from datetime import datetime
 
 
-connection = sqlite3.connect("pychronicle.db")
-cursor = connection.cursor()
+DATABASE_NAME = "pychronicle.db"
 
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS variable_states (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    timestamp TEXT NOT NULL,
-    line_number INTEGER NOT NULL,
-    variable_name TEXT NOT NULL,
-    serialized_value TEXT
-)
-""")
+def create_database():
+    connection = sqlite3.connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS variable_states (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT NOT NULL,
+        line_number INTEGER NOT NULL,
+        variable_name TEXT NOT NULL,
+        serialized_value TEXT
+    )
+    """)
+
+    connection.commit()
+    connection.close()
+
+    print("Database and table are ready!")
 
 
-cursor.execute("""
-INSERT INTO variable_states
-(timestamp, line_number, variable_name, serialized_value)
-VALUES (?, ?, ?, ?)
-""", (
-    datetime.now().isoformat(),
-    1,
-    "x",
-    "10"
-))
+def save_variable_state(timestamp, line_number, variable_name, serialized_value):
+    connection = sqlite3.connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    cursor.execute("""
+    INSERT INTO variable_states
+    (timestamp, line_number, variable_name, serialized_value)
+    VALUES (?, ?, ?, ?)
+    """, (
+        timestamp,
+        line_number,
+        variable_name,
+        serialized_value
+    ))
+
+    connection.commit()
+    connection.close()
 
 
-connection.commit()
-
-
-cursor.execute("SELECT * FROM variable_states")
-
-records = cursor.fetchall()
-
-print("Stored variable states:")
-
-for record in records:
-    print(record)
-
-
-connection.close()
+if __name__ == "__main__":
+    create_database()
