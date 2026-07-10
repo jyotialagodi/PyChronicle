@@ -7,9 +7,11 @@ from database import create_database, save_variable_state
 
 TARGET_FILE = os.path.abspath("target_program.py")
 
+# Stores the previous value of each variable
+previous_variables = {}
+
 
 def trace_execution(frame, event, arg):
-
     current_file = os.path.abspath(frame.f_code.co_filename)
 
     # Trace only target_program.py
@@ -20,22 +22,33 @@ def trace_execution(frame, event, arg):
         line_number = frame.f_lineno
         local_variables = frame.f_locals.copy()
 
-        # Remove unwanted built-in data
+        # Remove unwanted Python built-in data
         local_variables.pop("__builtins__", None)
 
-        print(f"Line {line_number}")
-        print(f"Variables: {local_variables}")
-        print("-" * 40)
-
-        # Save every variable into the database
+        # Check every current variable
         for variable_name, variable_value in local_variables.items():
 
-            save_variable_state(
-                datetime.now().isoformat(),
-                line_number,
-                variable_name,
-                repr(variable_value)
-            )
+            serialized_value = repr(variable_value)
+
+            # Save only if variable is new or its value changed
+            if (
+                variable_name not in previous_variables
+                or previous_variables[variable_name] != serialized_value
+            ):
+                print(
+                    f"CHANGE → Line {line_number} | "
+                    f"{variable_name} = {serialized_value}"
+                )
+
+                save_variable_state(
+                    datetime.now().isoformat(),
+                    line_number,
+                    variable_name,
+                    serialized_value
+                )
+
+                # Remember the latest value
+                previous_variables[variable_name] = serialized_value
 
     return trace_execution
 
@@ -66,10 +79,8 @@ clean_environment = {
 # Start tracing
 sys.settrace(trace_execution)
 
-
 # Run target_program.py
 exec(compiled_code, clean_environment)
-
 
 # Stop tracing
 sys.settrace(None)
