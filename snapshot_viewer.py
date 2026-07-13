@@ -1,29 +1,19 @@
-import sqlite3
+def open_snapshot():
+    import tkinter as tk
+    from tkinter import simpledialog
 
-DB_NAME = "pychronicle.db"
+    line = simpledialog.askinteger(
+        "Snapshot Viewer",
+        "Enter Line Number:"
+    )
 
-connection = sqlite3.connect(DB_NAME)
-cursor = connection.cursor()
+    if line is None:
+        return
 
-line_number = int(input("Enter line number: "))
-
-cursor.execute("""
-SELECT variable_name, serialized_value
-FROM variable_states
-WHERE line_number = ?
-ORDER BY variable_name
-""", (line_number,))
-
-records = cursor.fetchall()
-
-print("\n" + "=" * 40)
-print(f"Variables at Line {line_number}")
-print("=" * 40)
-
-if records:
-    for variable_name, value in records:
-        print(f"{variable_name} = {value}")
-else:
-    print("No variables found for this line.")
-
-connection.close()
+    try:
+        subprocess.run(
+            ["python", "snapshot_viewer.py", str(line)],
+            check=True
+        )
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
