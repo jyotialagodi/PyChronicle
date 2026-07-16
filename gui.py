@@ -1,6 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, simpledialog
+from tkinter import messagebox
+from tkinter import simpledialog
 import subprocess
+
 
 # -----------------------------
 # Functions
@@ -9,7 +11,6 @@ import subprocess
 def run_program():
     try:
         subprocess.Popen(["python", "tracer.py"])
-        messagebox.showinfo("Success", "Program started successfully!")
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -24,14 +25,16 @@ def open_timeline():
 def open_history():
     variable = simpledialog.askstring(
         "Variable History",
-        "Enter Variable Name\n\nExamples:\nx\ny\ni\ntotal\nmessage"
+        "Enter Variable Name:"
     )
 
-    if not variable:
+    if variable is None:
         return
 
     try:
-        subprocess.Popen(["python", "variable_history.py", variable])
+        subprocess.Popen(
+            ["python", "variable_history.py", variable]
+        )
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -39,14 +42,16 @@ def open_history():
 def open_snapshot():
     line = simpledialog.askinteger(
         "Snapshot Viewer",
-        "Enter Line Number"
+        "Enter Line Number:"
     )
 
     if line is None:
         return
 
     try:
-        subprocess.Popen(["python", "snapshot_viewer.py", str(line)])
+        subprocess.Popen(
+            ["python", "snapshot_viewer.py", str(line)]
+        )
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -54,7 +59,7 @@ def open_snapshot():
 def about():
     messagebox.showinfo(
         "About",
-        "PyChronicle\n\nPython Execution Visualizer\nVersion 1.0"
+        "PyChronicle\n\nPython Execution Visualizer\n\nVersion 2.0"
     )
 
 
@@ -63,15 +68,17 @@ def about():
 # -----------------------------
 
 root = tk.Tk()
+
 root.title("PyChronicle")
-root.geometry("500x500")
+root.geometry("550x550")
 root.resizable(False, False)
 
 title = tk.Label(
     root,
     text="PyChronicle\nPython Execution Visualizer",
-    font=("Arial", 18, "bold")
+    font=("Arial", 20, "bold")
 )
+
 title.pack(pady=20)
 
 tk.Button(

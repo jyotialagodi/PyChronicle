@@ -1,4 +1,6 @@
 import sqlite3
+import tkinter as tk
+from tkinter.scrolledtext import ScrolledText
 
 DB_NAME = "pychronicle.db"
 
@@ -13,23 +15,35 @@ ORDER BY line_number, id
 
 records = cursor.fetchall()
 
-print("=" * 50)
-print("          EXECUTION TIMELINE")
-print("=" * 50)
+root = tk.Tk()
+root.title("Execution Timeline")
+root.geometry("700x500")
+
+title = tk.Label(
+    root,
+    text="Execution Timeline",
+    font=("Arial", 16, "bold")
+)
+title.pack(pady=10)
+
+text = ScrolledText(root, width=80, height=25)
+text.pack(padx=10, pady=10, fill="both", expand=True)
 
 current_line = None
 
-for line_number, variable_name, value in records:
+for line, variable, value in records:
 
-    if current_line != line_number:
-        current_line = line_number
-        print(f"\nLine {line_number}")
-        print("-" * 25)
+    if current_line != line:
+        current_line = line
+        text.insert(tk.END, "\n")
+        text.insert(tk.END, "=" * 50 + "\n")
+        text.insert(tk.END, f"Line {line}\n")
+        text.insert(tk.END, "=" * 50 + "\n")
 
-    print(f"{variable_name} = {value}")
+    text.insert(tk.END, f"{variable} = {value}\n")
 
-print("\n" + "=" * 50)
-print("End of Timeline")
-print("=" * 50)
+text.config(state="disabled")
 
 connection.close()
+
+root.mainloop()
