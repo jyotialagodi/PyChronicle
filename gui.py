@@ -56,6 +56,16 @@ def open_snapshot():
         messagebox.showerror("Error", str(e))
 
 
+# -----------------------------
+# NEW FUNCTION
+# -----------------------------
+def open_summary():
+    try:
+        subprocess.Popen(["python", "summary_viewer.py"])
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+
 def about():
     messagebox.showinfo(
         "About",
@@ -70,7 +80,7 @@ def about():
 root = tk.Tk()
 
 root.title("PyChronicle")
-root.geometry("550x550")
+root.geometry("550x600")
 root.resizable(False, False)
 
 title = tk.Label(
@@ -111,6 +121,17 @@ tk.Button(
     width=30,
     height=2,
     command=open_snapshot
+).pack(pady=8)
+
+# -----------------------------
+# NEW BUTTON
+# -----------------------------
+tk.Button(
+    root,
+    text="Execution Summary",
+    width=30,
+    height=2,
+    command=open_summary
 ).pack(pady=8)
 
 tk.Button(
