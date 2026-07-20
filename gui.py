@@ -91,6 +91,90 @@ def about():
 # -----------------------------
 
 root = tk.Tk()
+# -----------------------------
+# Menu Bar
+# -----------------------------
+menu_bar = tk.Menu(root)
+
+root.config(menu=menu_bar)
+# -----------------------------
+# File Menu
+# -----------------------------
+file_menu = tk.Menu(menu_bar, tearoff=0)
+
+menu_bar.add_cascade(
+    label="File",
+    menu=file_menu
+)
+
+file_menu.add_command(
+    label="Run Program",
+    command=run_program
+)
+
+file_menu.add_separator()
+
+file_menu.add_command(
+    label="Exit",
+    command=root.destroy
+)
+# -----------------------------
+# View Menu
+# -----------------------------
+view_menu = tk.Menu(menu_bar, tearoff=0)
+
+menu_bar.add_cascade(
+    label="View",
+    menu=view_menu
+)
+
+view_menu.add_command(
+    label="Execution Timeline",
+    command=open_timeline
+)
+
+view_menu.add_command(
+    label="Variable History",
+    command=open_history
+)
+
+view_menu.add_command(
+    label="Snapshot Viewer",
+    command=open_snapshot
+)
+
+view_menu.add_command(
+    label="Execution Summary",
+    command=open_summary
+)
+# -----------------------------
+# Reports Menu
+# -----------------------------
+report_menu = tk.Menu(menu_bar, tearoff=0)
+
+menu_bar.add_cascade(
+    label="Reports",
+    menu=report_menu
+)
+
+report_menu.add_command(
+    label="Export Report",
+    command=export_report
+)
+# -----------------------------
+# Help Menu
+# -----------------------------
+help_menu = tk.Menu(menu_bar, tearoff=0)
+
+menu_bar.add_cascade(
+    label="Help",
+    menu=help_menu
+)
+
+help_menu.add_command(
+    label="About",
+    command=about
+)
 
 root.title("PyChronicle")
 root.geometry("550x650")
