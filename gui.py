@@ -56,9 +56,6 @@ def open_snapshot():
         messagebox.showerror("Error", str(e))
 
 
-# -----------------------------
-# NEW FUNCTION
-# -----------------------------
 def open_summary():
     try:
         subprocess.Popen(["python", "summary_viewer.py"])
@@ -66,10 +63,26 @@ def open_summary():
         messagebox.showerror("Error", str(e))
 
 
+# -----------------------------
+# NEW FUNCTION
+# -----------------------------
+def export_report():
+    try:
+        subprocess.Popen(["python", "export_report.py"])
+        messagebox.showinfo(
+            "Success",
+            "Execution report exported successfully!"
+        )
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+
 def about():
     messagebox.showinfo(
         "About",
-        "PyChronicle\n\nPython Execution Visualizer\n\nVersion 2.0"
+        "PyChronicle\n\n"
+        "Python Execution Visualizer\n\n"
+        "Version 2.0"
     )
 
 
@@ -80,7 +93,7 @@ def about():
 root = tk.Tk()
 
 root.title("PyChronicle")
-root.geometry("550x600")
+root.geometry("550x650")
 root.resizable(False, False)
 
 title = tk.Label(
@@ -123,15 +136,23 @@ tk.Button(
     command=open_snapshot
 ).pack(pady=8)
 
-# -----------------------------
-# NEW BUTTON
-# -----------------------------
 tk.Button(
     root,
     text="Execution Summary",
     width=30,
     height=2,
     command=open_summary
+).pack(pady=8)
+
+# -----------------------------
+# NEW BUTTON
+# -----------------------------
+tk.Button(
+    root,
+    text="Export Report",
+    width=30,
+    height=2,
+    command=export_report
 ).pack(pady=8)
 
 tk.Button(
