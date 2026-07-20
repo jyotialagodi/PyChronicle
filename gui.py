@@ -5,12 +5,34 @@ import subprocess
 
 
 # -----------------------------
+# GUI
+# -----------------------------
+root = tk.Tk()
+
+root.title("PyChronicle")
+root.geometry("550x680")
+root.resizable(False, False)
+
+# -----------------------------
+# Status Bar
+# -----------------------------
+status_bar = tk.Label(
+    root,
+    text="Status : Ready",
+    bd=1,
+    relief=tk.SUNKEN,
+    anchor="w",
+    font=("Arial", 10)
+)
+
+# -----------------------------
 # Functions
 # -----------------------------
 
 def run_program():
     try:
         subprocess.Popen(["python", "tracer.py"])
+        status_bar.config(text="Status : Program Executed")
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -18,6 +40,7 @@ def run_program():
 def open_timeline():
     try:
         subprocess.Popen(["python", "timeline_viewer.py"])
+        status_bar.config(text="Status : Timeline Opened")
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -35,6 +58,7 @@ def open_history():
         subprocess.Popen(
             ["python", "variable_history.py", variable]
         )
+        status_bar.config(text="Status : Variable History Opened")
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -52,6 +76,7 @@ def open_snapshot():
         subprocess.Popen(
             ["python", "snapshot_viewer.py", str(line)]
         )
+        status_bar.config(text="Status : Snapshot Viewer Opened")
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -59,16 +84,15 @@ def open_snapshot():
 def open_summary():
     try:
         subprocess.Popen(["python", "summary_viewer.py"])
+        status_bar.config(text="Status : Summary Opened")
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
 
-# -----------------------------
-# NEW FUNCTION
-# -----------------------------
 def export_report():
     try:
         subprocess.Popen(["python", "export_report.py"])
+        status_bar.config(text="Status : Report Exported")
         messagebox.showinfo(
             "Success",
             "Execution report exported successfully!"
@@ -87,25 +111,14 @@ def about():
 
 
 # -----------------------------
-# GUI
-# -----------------------------
-
-root = tk.Tk()
-# -----------------------------
 # Menu Bar
 # -----------------------------
 menu_bar = tk.Menu(root)
-
 root.config(menu=menu_bar)
-# -----------------------------
-# File Menu
-# -----------------------------
-file_menu = tk.Menu(menu_bar, tearoff=0)
 
-menu_bar.add_cascade(
-    label="File",
-    menu=file_menu
-)
+# File Menu
+file_menu = tk.Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="File", menu=file_menu)
 
 file_menu.add_command(
     label="Run Program",
@@ -118,15 +131,10 @@ file_menu.add_command(
     label="Exit",
     command=root.destroy
 )
-# -----------------------------
-# View Menu
-# -----------------------------
-view_menu = tk.Menu(menu_bar, tearoff=0)
 
-menu_bar.add_cascade(
-    label="View",
-    menu=view_menu
-)
+# View Menu
+view_menu = tk.Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="View", menu=view_menu)
 
 view_menu.add_command(
     label="Execution Timeline",
@@ -147,39 +155,28 @@ view_menu.add_command(
     label="Execution Summary",
     command=open_summary
 )
-# -----------------------------
-# Reports Menu
-# -----------------------------
-report_menu = tk.Menu(menu_bar, tearoff=0)
 
-menu_bar.add_cascade(
-    label="Reports",
-    menu=report_menu
-)
+# Reports Menu
+report_menu = tk.Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="Reports", menu=report_menu)
 
 report_menu.add_command(
     label="Export Report",
     command=export_report
 )
-# -----------------------------
-# Help Menu
-# -----------------------------
-help_menu = tk.Menu(menu_bar, tearoff=0)
 
-menu_bar.add_cascade(
-    label="Help",
-    menu=help_menu
-)
+# Help Menu
+help_menu = tk.Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="Help", menu=help_menu)
 
 help_menu.add_command(
     label="About",
     command=about
 )
 
-root.title("PyChronicle")
-root.geometry("550x650")
-root.resizable(False, False)
-
+# -----------------------------
+# Title
+# -----------------------------
 title = tk.Label(
     root,
     text="PyChronicle\nPython Execution Visualizer",
@@ -188,6 +185,9 @@ title = tk.Label(
 
 title.pack(pady=20)
 
+# -----------------------------
+# Buttons
+# -----------------------------
 tk.Button(
     root,
     text="Run Program",
@@ -228,9 +228,6 @@ tk.Button(
     command=open_summary
 ).pack(pady=8)
 
-# -----------------------------
-# NEW BUTTON
-# -----------------------------
 tk.Button(
     root,
     text="Export Report",
@@ -254,5 +251,10 @@ tk.Button(
     height=2,
     command=root.destroy
 ).pack(pady=20)
+
+# -----------------------------
+# Status Bar
+# -----------------------------
+status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
 root.mainloop()
