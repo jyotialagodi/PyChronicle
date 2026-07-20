@@ -87,9 +87,16 @@ def open_summary():
         status_bar.config(text="Status : Summary Opened")
     except Exception as e:
         messagebox.showerror("Error", str(e))
+def open_statistics():
+    try:
+        subprocess.Popen(["python", "statistics.py"])
+        status_bar.config(text="Status : Statistics Opened")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 
 def export_report():
+   
     try:
         subprocess.Popen(["python", "export_report.py"])
         status_bar.config(text="Status : Report Exported")
@@ -154,6 +161,10 @@ view_menu.add_command(
 view_menu.add_command(
     label="Execution Summary",
     command=open_summary
+)
+view_menu.add_command(
+    label="Statistics",
+    command=open_statistics
 )
 
 # Reports Menu
@@ -226,6 +237,17 @@ tk.Button(
     width=30,
     height=2,
     command=open_summary
+).pack(pady=8)
+
+tk.Button(
+    root,
+    text="📊 Statistics",
+    width=30,
+    height=2,
+    bg="#16A085",
+    fg="white",
+    font=("Segoe UI", 11, "bold"),
+    command=open_statistics
 ).pack(pady=8)
 
 tk.Button(
