@@ -106,6 +106,27 @@ def export_report():
         )
     except Exception as e:
         messagebox.showerror("Error", str(e))
+def clear_database():
+    import sqlite3
+
+    try:
+        connection = sqlite3.connect("pychronicle.db")
+        cursor = connection.cursor()
+
+        cursor.execute("DELETE FROM variable_states")
+
+        connection.commit()
+        connection.close()
+
+        status_bar.config(text="Status : Database Cleared")
+
+        messagebox.showinfo(
+            "Success",
+            "Database cleared successfully!"
+        )
+
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 
 def about():
@@ -256,6 +277,17 @@ tk.Button(
     width=30,
     height=2,
     command=export_report
+).pack(pady=8)
+
+tk.Button(
+    root,
+    text="🗑 Clear Database",
+    width=30,
+    height=2,
+    bg="#C0392B",
+    fg="white",
+    font=("Segoe UI", 11, "bold"),
+    command=clear_database
 ).pack(pady=8)
 
 tk.Button(
