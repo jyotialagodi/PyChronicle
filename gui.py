@@ -127,6 +127,16 @@ def clear_database():
 
     except Exception as e:
         messagebox.showerror("Error", str(e))
+def reset_project():
+    try:
+        subprocess.Popen(["python", "reset_project.py"])
+        status_bar.config(text="Status : Project Reset")
+        messagebox.showinfo(
+            "Success",
+            "Project reset successfully!"
+        )
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 
 def about():
@@ -288,6 +298,17 @@ tk.Button(
     fg="white",
     font=("Segoe UI", 11, "bold"),
     command=clear_database
+).pack(pady=8)
+
+tk.Button(
+    root,
+    text="🔄 Reset Project",
+    width=30,
+    height=2,
+    bg="#8E44AD",
+    fg="white",
+    font=("Segoe UI", 11, "bold"),
+    command=reset_project
 ).pack(pady=8)
 
 tk.Button(
